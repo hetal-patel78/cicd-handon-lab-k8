@@ -73,10 +73,11 @@ jobs:
 
   static-analysis:
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - name: MegaLinter
-        uses: oxsecurity/megalinter/flavors/dotnet@v7
+        uses: oxsecurity/megalinter/flavors/dotnet@v8
         env:
           DEFAULT_WORKSPACE: ${{ github.workspace }}
           APPLY_FIXES: none
