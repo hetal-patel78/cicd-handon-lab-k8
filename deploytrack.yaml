@@ -1,0 +1,23 @@
+release:
+  project: MySubscriptionService
+  environments:
+    - name: Test
+      region: ap-southeast-2
+      k8s_context: ap-southeast-2-k8s-paas-test-rua
+      new_relic: true
+      slack_channel: "#billing-releases"
+    - name: UAT
+      region: us-west-2
+      k8s_context: us-west-2-k8s-paas-uat-rua
+      new_relic: true
+      slack_channel: "#billing-releases"
+    - name: Production
+      region: us-east-1
+      k8s_context: us-east-1-k8s-paas-prod-rua
+      new_relic: true
+      slack_channel: "#billing-releases-prod"
+
+  cab:
+    required_for: [Production]
+    skip_label: "no cab required"
+    notification_channel: "#cab-requests"

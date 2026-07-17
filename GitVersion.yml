@@ -1,0 +1,18 @@
+mode: ContinuousDeployment
+next-version: 1.0.0
+
+branches:
+  main:
+    regex: ^main$
+    increment: patch
+    source-branches: ['feature']
+    is-mainline: true
+
+  feature:
+    regex: ^feature/[-_A-Za-z0-9]+$
+    increment: Minor
+    source-branches: ['main']
+    tag: useBranchName
+
+ignore:
+  sha: []

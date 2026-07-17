@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: MySubscriptionService API
+  description: Subscription management API for billing-chargebee-buyflow
+  version: 1.0.0
+servers:
+  - url: https://my-subscription-service.global.xero.com
+    description: Production
+  - url: https://my-subscription-service.global.xero-test.com
+    description: Test
+paths:
+  /api/subscriptions:
+    get:
+      summary: List all subscriptions
+      operationId: getAllSubscriptions
+      responses:
+        "200":
+          description: A list of subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscription"
+    post:
+      summary: Create a new subscription
+      operationId: createSubscription
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateSubscriptionRequest"
+      responses:
+        "201":
+          description: Subscription created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+  /api/subscriptions/{id}:
+    get:
+      summary: Get a subscription by ID
+      operationId: getSubscriptionById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Subscription details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "404":
+          description: Subscription not found
+  /api/subscriptions/{id}/cancel:
+    post:
+      summary: Cancel a subscription
+      operationId: cancelSubscription
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Subscription cancelled
+        "404":
+          description: Subscription not found
+  /ping:
+    get:
+      summary: Liveness check
+      operationId: livenessCheck
+      responses:
+        "200":
+          description: Service is alive
+  /ready:
+    get:
+      summary: Readiness check
+      operationId: readinessCheck
+      responses:
+        "200":
+          description: Service is ready
+components:
+  schemas:
+    Subscription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        customerName:
+          type: string
+        email:
+          type: string
+          format: email
+        plan:
+          type: string
+        amount:
+          type: number
+          format: decimal
+        createdAt:
+          type: string
+          format: date-time
+        isActive:
+          type: boolean
+    CreateSubscriptionRequest:
+      type: object
+      required:
+        - customerName
+        - email
+      properties:
+        customerName:
+          type: string
+        email:
+          type: string
+          format: email
+        plan:
+          type: string
+          default: Basic
+        amount:
+          type: number
+          format: decimal
