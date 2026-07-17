@@ -107,7 +107,9 @@ jobs:
             --collect:"XPlat Code Coverage" \
             --results-directory "${{ runner.temp }}/coverage/component"
       - name: SonarCloud Scan
-        if: ${{ secrets.SONAR_TOKEN != '' }}
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: env.SONAR_TOKEN != ''
         run: |
           dotnet tool install --global dotnet-sonarscanner
           dotnet sonarscanner begin \
